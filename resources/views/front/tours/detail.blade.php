@@ -79,55 +79,7 @@
                         <div class="tour-details__spacer"></div>
                         <h3 class="tour-details__title">Fasilitas</h3>
                         <p>{!! $tour->short_description !!}</p>
-                        {{-- <h3 class="tour-details__subtitle">Included/Exclude</h3>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <ul class="tour-details__list list-unstyled">
-                                    <li>
-                                        <i class="fa fa-check"></i>
-                                        Pick and Drop Services
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-check"></i>
-                                        1 Meal Per Destination
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-check"></i>
-                                        Cruise Dinner & Music Event
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-check"></i>
-                                        Visit 7 Best Places in the City With Group
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <ul class="tour-details__list unavailable list-unstyled">
-                                    <li>
-                                        <i class="fa fa-times"></i>
-                                        Additional Services
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-times"></i>
-                                        1 Meal Per Destination
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-times"></i>
-                                        Insurance
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-times"></i>
-                                        Food & Drinks
-                                    </li>
-                                </ul>
-                            </div>
-                        </div> --}}
-                        {{--                        
-                        <div class="tour-details__spacer"></div>
-                        <h3 class="tour-details__title">Tour Location</h3>
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4562.753041141002!2d-118.80123790098536!3d34.152323469614075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80e82469c2162619%3A0xba03efb7998eef6d!2sCostco+Wholesale!5e0!3m2!1sbn!2sbd!4v1562518641290!5m2!1sbn!2sbd"
-                            class="google-map__contact google-map__tour-details" allowfullscreen></iframe> --}}
+
 
                     </div>
 
@@ -136,7 +88,18 @@
 
                     <div class="tour-sidebar__search tour-sidebar__single">
                         <h3>Pesan Jeep Merapi</h3>
-                        <form action="https://wa.me/{{ $profil->no_wa ?? '' }}" method="get" target="_blank"
+                        <?php
+                            $rawWa = $profil->no_wa ?? '';
+                            $waDigits = preg_replace('/\D/', '', $rawWa);
+                            if (preg_match('/^0/', $waDigits)) {
+                                $waDigits = '62' . preg_replace('/^0+/', '', $waDigits);
+                            } elseif (preg_match('/^8/', $waDigits)) {
+                                $waDigits = '62' . $waDigits;
+                            } elseif (!preg_match('/^62/', $waDigits) && $waDigits !== '') {
+                                // leave as is (maybe another country code)
+                            }
+                        ?>
+                        <form action="https://wa.me/{{ $waDigits ?? preg_replace('/\D/', '', $profil->no_wa ?? '') }}" method="get" target="_blank"
                             class="tour-sidebar__search-form">
                             <div class="input-group">
                                 <input type="text" name="name" placeholder="Nama Anda" required>
@@ -273,7 +236,24 @@
                                     if (note) lines.push('Catatan: ' + note);
 
                                     var text = encodeURIComponent(lines.join('\n'));
-                                    var phoneWA = "{{ $profil->no_wa ?? '' }}".replace(/[^0-9]/g, '');
+
+                                    function normalizePhoneForWa(s) {
+                                        var p = String(s || '').replace(/[^0-9]/g, '');
+                                        if (p.startsWith('0')) {
+                                            p = '62' + p.replace(/^0+/, '');
+                                        } else if (p.startsWith('8')) {
+                                            p = '62' + p;
+                                        } else if (p.startsWith('62')) {
+                                            // ok
+                                        }
+                                        return p;
+                                    }
+
+                                    var phoneWA = normalizePhoneForWa("{{ $profil->no_wa ?? '' }}");
+                                    if (!phoneWA) {
+                                        alert('Nomor WhatsApp tidak tersedia.');
+                                        return;
+                                    }
                                     var url = 'https://wa.me/' + phoneWA + '?text=' + text;
 
                                     window.open(url, '_blank');
