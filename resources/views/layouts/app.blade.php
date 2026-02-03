@@ -177,6 +177,17 @@
         <!--  Sidebar End -->
         <div class="page-wrapper">
             <!--  Header Start -->
+            <?php
+                $rawWa = $profil->no_wa ?? '';
+                $waDigits = preg_replace('/\D/', '', $rawWa);
+                if (preg_match('/^0/', $waDigits)) {
+                    $waDigits = '62' . preg_replace('/^0+/', '', $waDigits);
+                } elseif (preg_match('/^8/', $waDigits)) {
+                    $waDigits = '62' . $waDigits;
+                } elseif (!preg_match('/^62/', $waDigits) && $waDigits !== '') {
+                    // leave as is (maybe another country code)
+                }
+            ?>
             <header class="topbar">
                 <div class="with-vertical"><!-- ---------------------------------- -->
                     <!-- Start Vertical Layout Header -->
@@ -197,7 +208,7 @@
                             </li> -->
                             <li class="nav-item dropdown-hover d-none d-lg-block">
                                 <a class="nav-link" target="_blank"
-                                    href="https://wa.me/{{ $profil->no_wa }}">Kontak</a>
+                                    href="https://wa.me/{{ $waDigits ?? preg_replace('/\D/', '', $profil->no_wa ?? '') }}">Kontak</a>
                             </li>
 
                             <li class="nav-item dropdown-hover d-none d-lg-block">

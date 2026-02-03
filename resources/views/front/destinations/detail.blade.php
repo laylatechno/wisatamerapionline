@@ -2,7 +2,7 @@
 @section('title', $title)
 @section('content')
 
- 
+
 
 <section class="page-header"
         style="position: relative; padding: 120px 0; background-size: cover; background-position: center; min-height: 300px;">
@@ -29,7 +29,7 @@
                             <img src="{{ asset('upload/destinations/' . $destination->thumbnail) }}" alt="{{ $destination->name }}" class="img-fluid">
                         </div>
                     @endif
-                    
+
                     <div class="destination-details__meta mb-4">
                         <div class="row">
                             <div class="col-md-6">
@@ -66,7 +66,7 @@
                     @endif
                 </div>
             </div>
-            
+
             <div class="col-lg-4">
                 <div class="sidebar">
                     <div class="sidebar__single sidebar__info">
@@ -99,9 +99,37 @@
                         <h3 class="sidebar__title">Hubungi Kami</h3>
                         <p>Tertarik dengan destinasi ini? Hubungi kami untuk informasi lebih lanjut.</p>
                         @if($profil && $profil->no_wa)
-                            <a href="https://wa.me/{{ $profil->no_wa }}?text=Halo, saya tertarik dengan destinasi {{ $destination->name }}" 
+                            @php
+                                $raw = $profil->no_wa ?? '';
+                                $d = preg_replace('/\D/', '', $raw);
+                                if (!$d) {
+                                    $waFormatted = '+62';
+                                } elseif (preg_match('/^0/', $d)) {
+                                    $waFormatted = '+62 ' . preg_replace('/^0+/', '', $d);
+                                } elseif (preg_match('/^8/', $d)) {
+                                    $waFormatted = '+62 ' . $d;
+                                } elseif (preg_match('/^62/', $d)) {
+                                    $waFormatted = '+' . $d;
+                                } else {
+                                    $waFormatted = '+' . $d;
+                                }
+
+                                // compute digits for wa.me link (no plus sign)
+                                if (!$d) {
+                                    $waLinkDigits = preg_replace('/\D/', '', $profil->no_wa ?? '');
+                                } elseif (preg_match('/^0/', $d)) {
+                                    $waLinkDigits = '62' . preg_replace('/^0+/', '', $d);
+                                } elseif (preg_match('/^8/', $d)) {
+                                    $waLinkDigits = '62' . $d;
+                                } elseif (preg_match('/^62/', $d)) {
+                                    $waLinkDigits = $d;
+                                } else {
+                                    $waLinkDigits = $d;
+                                }
+                            @endphp
+                            <a href="https://wa.me/{{ $waLinkDigits }}?text=Halo, saya tertarik dengan destinasi {{ $destination->name }}"
                                class="btn btn-primary" target="_blank">
-                                <i class="fab fa-whatsapp"></i> Chat WhatsApp
+                                <i class="fab fa-whatsapp"></i> Chat WhatsApp ({{ $waFormatted }})
                             </a>
                         @endif
                     </div>

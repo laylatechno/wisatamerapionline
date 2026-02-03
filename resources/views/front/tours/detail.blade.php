@@ -249,7 +249,7 @@
                                         return p;
                                     }
 
-                                    var phoneWA = normalizePhoneForWa("{{ $profil->no_wa ?? '' }}");
+                                    var phoneWA = (window.siteWaNumber && window.siteWaNumber.length > 0) ? window.siteWaNumber : normalizePhoneForWa("{{ $profil->no_wa ?? '' }}");
                                     if (!phoneWA) {
                                         alert('Nomor WhatsApp tidak tersedia.');
                                         return;

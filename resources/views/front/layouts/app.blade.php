@@ -216,6 +216,17 @@
 </head>
 
 <body>
+    <?php
+        $rawWa = $profil->no_wa ?? '';
+        $waDigits = preg_replace('/\D/', '', $rawWa);
+        if (preg_match('/^0/', $waDigits)) {
+            $waDigits = '62' . preg_replace('/^0+/', '', $waDigits);
+        } elseif (preg_match('/^8/', $waDigits)) {
+            $waDigits = '62' . $waDigits;
+        } elseif (!preg_match('/^62/', $waDigits) && $waDigits !== '') {
+            // leave as is (maybe another country code)
+        }
+    ?>
     <div class="preloader">
         <img src="{{ asset('/upload/profil/' . ($profil->favicon ?: 'https://static1.squarespace.com/static/524883b7e4b03fcb7c64e24c/524bba63e4b0bf732ffc8bce/646fb10bc178c30b7c6a31f2/1712669811602/Squarespace+Favicon.jpg?format=1500w')) }}"
             class="preloader__image" alt="">
@@ -460,7 +471,7 @@
 
 
     <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/{{ $profil->no_wa }}?text={{ urlencode($profil->deskripsi_3) }}" class="whatsapp-button"
+    <a href="https://wa.me/{{ $waDigits ?? preg_replace('/\D/', '', $profil->no_wa ?? '') }}?text={{ urlencode($profil->deskripsi_3) }}" class="whatsapp-button"
         title="Hubungi Kami via WhatsApp">
         <img src="https://cdn-icons-png.freepik.com/256/3983/3983877.png?semt=ais_white_label"
             style="border-radius: 30%" alt="WhatsApp">
@@ -490,6 +501,19 @@
     <!-- template scripts -->
     <script src="{{ asset('template/front/assets/js/theme.js') }}"></script>
     @stack('scripts')
+
+    <script>
+        window.siteWaNumber = '{{ $waDigits ?? preg_replace('/\\D/', '', $profil->no_wa ?? '') }}';
+        function normalizePhoneForWa(s) {
+            var p = String(s || '').replace(/[^0-9]/g, '');
+            if (p.startsWith('0')) {
+                p = '62' + p.replace(/^0+/, '');
+            } else if (p.startsWith('8')) {
+                p = '62' + p;
+            }
+            return p;
+        }
+    </script>
 
     <script type="text/javascript">
         function googleTranslateElementInit() {

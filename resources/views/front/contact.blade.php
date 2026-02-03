@@ -23,7 +23,7 @@
             <div class="col-lg-6 mb-4">
                 <div class="contact-left">
                     <h2 style="font-size: 32px; margin: 0 0 30px; color: #333; font-weight: 700;">Kirim Pesan</h2>
-                    
+
                     <form action="{{ route('front.contact.store') }}" method="POST" class="contact-form" id="contactForm">
                         @csrf
                         <div class="mb-3">
@@ -47,18 +47,37 @@
                     </form>
                 </div>
             </div>
-            
+
             <div class="col-lg-6">
                 <div class="contact-right" style="padding-left: 24px;">
                     <h2 style="font-size: 32px; margin: 0 0 30px; color: #333; font-weight: 700;">Kontak Kami</h2>
-                    
+
+                    @php
+                        $formatPhone = function ($raw) {
+                            $d = preg_replace('/\D/', '', $raw);
+                            if (!$d) return '+62 812 3456 7890';
+                            if (preg_match('/^0/', $d)) {
+                                return '+62 ' . preg_replace('/^0+/', '', $d);
+                            }
+                            if (preg_match('/^8/', $d)) {
+                                return '+62 ' . $d;
+                            }
+                            if (preg_match('/^62/', $d)) {
+                                return '+' . $d;
+                            }
+                            return '+' . $d;
+                        };
+                        $adminTel = $formatPhone($profil->no_telp ?? '');
+                        $adminWa = $formatPhone($profil->no_wa ?? '');
+                    @endphp
+
                     <div class="contact-info-card" style="background: #f8f9fa; border-radius: 12px; padding: 20px; display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
                         <div class="contact-icon" style="width: 56px; height: 56px; border-radius: 50%; background: #ffc107; display: flex; align-items: center; justify-content: center; color: #333; font-size: 20px;">
                             <i class="fa fa-phone"></i>
                         </div>
                         <div>
                             <div style="color: #6c757d; font-size: 14px;">Admin 1</div>
-                            <div style="font-weight: 700; color: #333;">{{ $profil->no_telp ?? '+62 812 3456 7890' }}</div>
+                            <div style="font-weight: 700; color: #333;">{{ $adminTel }}</div>
                         </div>
 
 
@@ -67,12 +86,12 @@
                         </div>
                         <div>
                             <div style="color: #6c757d; font-size: 14px;">Admin 2 </div>
-                            <div style="font-weight: 700; color: #333;">{{ $profil->no_wa ?? '+62 812 3456 7890' }}</div>
+                            <div style="font-weight: 700; color: #333;">{{ $adminWa }}</div>
                         </div>
-                        
-                        
+
+
                     </div>
-                    
+
                     <div class="contact-info-card" style="background: #f8f9fa; border-radius: 12px; padding: 20px; display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
                         <div class="contact-icon" style="width: 56px; height: 56px; border-radius: 50%; background: #ffc107; display: flex; align-items: center; justify-content: center; color: #333; font-size: 20px;">
                             <i class="fa fa-envelope"></i>
@@ -82,7 +101,7 @@
                             <div style="font-weight: 700; color: #333;">{{ $profil->email ?? 'jeep@gmail.com' }}</div>
                         </div>
                     </div>
-                    
+
                     <div class="contact-info-card" style="background: #f8f9fa; border-radius: 12px; padding: 20px; display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
                         <div class="contact-icon" style="width: 56px; height: 56px; border-radius: 50%; background: #ffc107; display: flex; align-items: center; justify-content: center; color: #333; font-size: 20px;">
                             <i class="fa fa-map-marker"></i>
