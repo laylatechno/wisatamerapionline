@@ -196,6 +196,12 @@
                                                                 <div class="invalid-feedback" id="destination-order-display-error"></div>
                                                             </div>
 
+                                                              <div class="mb-3">
+                                                                <label for="destination-views" class="form-label">Views</label>
+                                                                <input type="number" class="form-control" id="destination-views" name="views" placeholder="Contoh: 1" value="0" min="0">
+                                                                <div class="invalid-feedback" id="destination-views-error"></div>
+                                                            </div>
+
                                                             <div class="mb-3">
                                                                 <label for="destination-thumbnail" class="form-label">Thumbnail (JPG, JPEG, PNG)</label>
                                                                 <input type="file" class="form-control" id="destination-thumbnail" name="thumbnail" accept=".jpg,.jpeg,.png" onchange="validateDestinationImageUpload()">
@@ -284,6 +290,12 @@
                                                                 <div class="invalid-feedback" id="edit-destination-order-display-error"></div>
                                                             </div>
 
+                                                              <div class="mb-3">
+                                                                <label for="edit-destination-views" class="form-label">Views</label>
+                                                                <input type="number" class="form-control" id="edit-destination-views" name="views" placeholder="Contoh: 1" value="0" min="0">
+                                                                <div class="invalid-feedback" id="edit-destination-views-error"></div>
+                                                            </div>
+
                                                             <div class="mb-3">
                                                                 <label for="edit-destination-thumbnail" class="form-label">Thumbnail (JPG, JPEG, PNG)</label>
                                                                 <input type="file" class="form-control" id="edit-destination-thumbnail" name="thumbnail" accept=".jpg,.jpeg,.png" onchange="validateEditDestinationImageUpload()">
@@ -345,13 +357,15 @@
                                                             <label for="show-destination-status" class="form-label">Status</label>
                                                             <input type="text" class="form-control" id="show-destination-status" readonly>
                                                         </div>
-                                                        <div class="mb-3">
-                                                            <label for="show-destination-views" class="form-label">Jumlah Views</label>
-                                                            <input type="text" class="form-control" id="show-destination-views" readonly>
-                                                        </div>
+
                                                         <div class="mb-3">
                                                             <label for="show-destination-order-display" class="form-label">Urutan Tampilan</label>
                                                             <input type="text" class="form-control" id="show-destination-order-display" readonly>
+                                                        </div>
+
+                                                         <div class="mb-3">
+                                                            <label for="show-destination-views" class="form-label">Jumlah Views</label>
+                                                            <input type="text" class="form-control" id="show-destination-views" readonly>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="show-destination-thumbnail" class="form-label">Thumbnail</label>
@@ -588,7 +602,7 @@
                 e.preventDefault();
                 // Sinkronkan Quill content
                 document.getElementById('destination-description').value = addDescriptionEditor.root.innerHTML;
-                
+
                 const form = $(this);
                 const btn = $('#btn-save');
                 const formData = new FormData(form[0]);
@@ -654,6 +668,7 @@
                             $('#edit-destination-location-details').val(response.location_details || '');
                             $('#edit-destination-status').val(response.status);
                             $('#edit-destination-order-display').val(response.order_display);
+                            $('#edit-destination-views').val(response.views);
                             $('#edit-destination-thumbnail').val('');
 
                             const thumbnailUrl = response.thumbnail ?
@@ -686,7 +701,7 @@
                 e.preventDefault();
                 // Sinkronkan Quill content
                 document.getElementById('edit-destination-description').value = editDescriptionEditor.root.innerHTML;
-                
+
                 const form = $(this);
                 const btn = $('#btn-update');
                 const destinationId = $('#edit-destination-id').val();
@@ -745,7 +760,9 @@
                             $('#show-destination-status').val(response.status === 'active' ? 'Aktif' : 'Tidak Aktif');
                             $('#show-destination-views').val(response.views || '0');
                             $('#show-destination-order-display').val(response.order_display || '0');
-                            
+                              $('#show-destination-views').val(response.order_display || '0');
+
+
                             const thumbnailUrl = response.thumbnail ?
                                 `{{ asset('upload/destinations') }}/${response.thumbnail}` : null;
                             if (thumbnailUrl && /\.(jpg|jpeg|png|webp)$/i.test(thumbnailUrl)) {
@@ -755,7 +772,7 @@
                             } else {
                                 $('#show-destination-thumbnail').html('Tidak ada thumbnail');
                             }
-                            
+
                             $('#showDestinationModal').modal('show');
                         } else {
                             Swal.fire({

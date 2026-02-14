@@ -144,22 +144,22 @@
             <!-- Agent DataTable -->
             <div class="mb-4">
                 <div class="section-title mb-3">
-                    <h1>Data Agent</h1>
+                    <h1>Team Kami</h1>
                 </div>
                 <div class="table-responsive">
                     <table id="agentTable" class="table table-striped table-bordered" style="width:100%">
                         <thead>
                             <tr>
-                                <th width="5%">No</th>
-                                <th>Nama</th>
-                                <th>Telepon</th>
-                                <th>Kota</th>
-                                <th>Alamat</th>
+                                <th width="5%" class="text-center">No</th>
+                                <th class="text-center">Nama</th>
+                                <th class="text-center">Telepon</th>
+                                <th class="text-center">Kota</th>
+                                <th class="text-center">Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($data_agent as $agent)
-                                <tr>
+                                <tr class="text-center">
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $agent->name }}</td>
                                     <td>{{ $agent->phone ?? 'Tidak ada' }}</td>

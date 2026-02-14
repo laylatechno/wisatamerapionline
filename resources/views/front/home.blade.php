@@ -120,9 +120,9 @@
                     <div class="banner-one__single" style="background-image: url({{ $img }});">
                         <div class="container">
                             @if(!empty($link))
-                                <h2><a href="{{ $link }}" style="color:#fff; text-decoration:none;">{{ $title }}</a></h2>
+                                <h2 class="text-center"><a href="{{ $link }}" style="color:#fff; text-decoration:none;">{{ $title }}</a></h2>
                             @else
-                                <h2>{{ $title }}</h2>
+                                <h2 class="text-center">{{ $title }}</h2>
                             @endif
                             @if(!empty($desc))
                                 <p>{{ $desc }}</p>
