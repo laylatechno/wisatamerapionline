@@ -260,7 +260,7 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="mb-4">
-                                                <label for="deskripsi_3" class="form-label fw-semibold">Deskripsi 3</label>
+                                                <label for="deskripsi_3" class="form-label fw-semibold">Deskripsi 3 Untuk Chat</label>
                                                 <textarea class="form-control" name="deskripsi_3" id="deskripsi_3" rows="4">{{ $profil->deskripsi_3 }}</textarea>
                                             </div>
                                         </div>
