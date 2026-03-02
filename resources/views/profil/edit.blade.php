@@ -261,8 +261,7 @@
                                         <div class="col-12">
                                             <div class="mb-4">
                                                 <label for="deskripsi_3" class="form-label fw-semibold">Deskripsi 3</label>
-                                                <div id="deskripsi_3-editor"></div>
-                                                <input type="hidden" name="deskripsi_3" id="deskripsi_3">
+                                                <textarea class="form-control" name="deskripsi_3" id="deskripsi_3" rows="4">{{ $profil->deskripsi_3 }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -484,7 +483,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const editors = {
         deskripsi_1: new Quill('#deskripsi_1-editor', quillConfig),
         deskripsi_2: new Quill('#deskripsi_2-editor', quillConfig),
-        deskripsi_3: new Quill('#deskripsi_3-editor', quillConfig),
         term: new Quill('#term-editor', quillConfig),
         description: new Quill('#description-editor', quillConfig),
         vision: new Quill('#vision-editor', quillConfig),
@@ -493,7 +491,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Isi data dari DB
     @php
-        $quillFields = ['deskripsi_1', 'deskripsi_2', 'deskripsi_3', 'term', 'description', 'vision', 'mision'];
+        $quillFields = ['deskripsi_1', 'deskripsi_2', 'term', 'description', 'vision', 'mision'];
     @endphp
     @foreach($quillFields as $field)
         if (editors.{{ $field }}) {
